@@ -1,0 +1,76 @@
+import os
+import numpy as np
+import nibabel as nib
+from data_handling import load_nifti_file, load_json_metadata
+from fitting_ext import fit_volume
+
+
+def save_nifti(data, ref_img, out_path):
+    img = nib.Nifti1Image(data, affine=ref_img.affine, header=ref_img.header)
+    nib.save(img, out_path)
+    print(f"Saved {out_path}")
+
+
+def asl():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(script_dir, "..", "data", "1TE")
+
+    pwi_nii_path = os.path.join(data_dir, "PWI4D.nii")
+    pwi_json_path = os.path.join(data_dir, "PWI4D.json")
+    m0_nii_path = os.path.join(data_dir, "M0.nii")
+    m0_json_path = os.path.join(data_dir, "M0.json")
+
+    print("Loading data...")
+    pwi_img, pwi_data_full = load_nifti_file(pwi_nii_path)
+    m0_img, m0_data_full = load_nifti_file(m0_nii_path)
+    pwi_meta = load_json_metadata(pwi_json_path)
+    m0_meta = load_json_metadata(m0_json_path)
+
+    echo_times = np.array(pwi_meta["EchoTime"])
+    plds = np.array(pwi_meta["PostLabelingDelay"])
+
+    tau_raw = pwi_meta.get("LabelingDuration", 1.8)
+    tau = tau_raw[0] if isinstance(tau_raw, list) else tau_raw
+
+    if m0_data_full.ndim == 4 and m0_data_full.shape[3] == 1:
+        m0_data = m0_data_full[:, :, :, 0]
+    else:
+        m0_data = m0_data_full
+
+    chosen_te = 0.01302
+    indices = [i for i, te in enumerate(echo_times) if np.isclose(te, chosen_te)]
+
+    pwi_data = pwi_data_full[..., indices]
+    t = plds[indices]
+
+    print(f"PWI data shape: {pwi_data.shape}")
+    print(f"M0 data shape: {m0_data.shape}")
+    print(f"Time points: {t}")
+    print(f"Tau: {tau}")
+
+    nan_count = np.sum(np.isnan(pwi_data))
+    total_elements = np.prod(pwi_data.shape)
+    print(f"NaN values in PWI data: {nan_count}/{total_elements} ({100 * nan_count / total_elements:.2f}%)")
+
+    if nan_count > 0:
+        print("WARNING: PWI data contains NaN values!")
+        pwi_data = np.nan_to_num(pwi_data, nan=0.0)
+        print("Replaced NaN values with 0")
+
+    print(f"PWI data range after NaN handling: [{np.min(pwi_data):.6f}, {np.max(pwi_data):.6f}]")
+    print(f"M0 data range: [{np.min(m0_data):.6f}, {np.max(m0_data):.6f}]")
+    print(f"Using {len(indices)} volumes with TE = {chosen_te}")
+
+    print("Running extended LM fitting ...")
+    att_map, cbf_map, abv_map = fit_volume(pwi_data, t, m0_data, tau)
+
+    print("Saving extended LM results ...")
+    save_nifti(att_map, pwi_img, os.path.join(data_dir, "ATT_map_LM_ext.nii.gz"))
+    save_nifti(cbf_map, pwi_img, os.path.join(data_dir, "CBF_map_LM_ext.nii.gz"))
+    save_nifti(abv_map, pwi_img, os.path.join(data_dir, "aBV_map_LM_ext.nii.gz"))
+
+    print("Done!")
+
+
+if __name__ == "__main__":
+    asl()
