@@ -5,7 +5,7 @@ from data_handling import load_nifti_file, load_json_metadata
 from fitting import fit_voxel, fit_volume
 from voxelwise_model import deltaM_model
 
-
+# Save nifti data
 def save_nifti(data, ref_img, out_path):
 	img = nib.Nifti1Image(data, affine=ref_img.affine, header=ref_img.header)
 	nib.save(img, out_path)
