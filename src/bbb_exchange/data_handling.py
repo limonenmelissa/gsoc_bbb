@@ -17,3 +17,8 @@ def load_json_metadata(json_path):
     with open(json_path, "r") as f:
         metadata = json.load(f)
     return metadata
+
+def save_nifti(data, ref_img, out_path):
+	img = nib.Nifti1Image(data, affine=ref_img.affine, header=ref_img.header)
+	nib.save(img, out_path)
+	print(f"Saved {out_path}")
