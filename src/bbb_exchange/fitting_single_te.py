@@ -701,8 +701,8 @@ def choose_parameter_config():
 	# Enable LS-based priors
 	param_config['att_prior_from_ls'] = True
 	param_config['cbf_prior_from_ls'] = True
-	param_config['att_prior_std'] = 0.3  # Adjust as needed
-	param_config['cbf_prior_std'] = 15.0  # Adjust as needed
+	param_config['att_prior_std'] = 0.3
+	param_config['cbf_prior_std'] = 15.0
 
 	# Load T1 maps from files
 	# param_config['T1_blood'] = "path/to/T1_blood_map.nii"
@@ -724,7 +724,7 @@ def bayesian_fit_voxel_ext(t, signal, m0a, tau,
 	Bayesian fitting for a single voxel with extended model and flexible parameters
 	"""
 
-	# Prepare data for Stan
+	# Prepare data for using Stan
 	data = {
 		'n': len(t),
 		't': t.astype(float),
@@ -975,7 +975,7 @@ def bayesian_fit_subset(pwi_data, t, m0_data, tau, param_maps, param_config,
 				print(f"  Success: ATT={att_mean:.3f}±{att_std:.3f}s, "
 					  f"CBF={cbf_mean:.1f}±{cbf_std:.1f} ml/min/100g")
 
-				# Show comparison with LS if available
+				# Show comparison with LS
 				if att_ls_val is not None and cbf_ls_val is not None:
 					att_diff = att_mean - att_ls_val
 					cbf_diff = cbf_mean - cbf_ls_val
