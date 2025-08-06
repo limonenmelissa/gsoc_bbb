@@ -462,8 +462,8 @@ def bayesian_fit_voxel(t, signal, m0a, tau,
 
 	Parameters:
 	- t: time points
-	- signal: signal values (SHOULD BE NORMALIZED BY M0 ALREADY!)
-	- m0a: arterial M0 value (should be 1.0 for normalized signals)
+	- signal: signal values
+	- m0a: arterial M0 value
 	- tau: labeling duration
 	- T1_blood_val: T1 blood value for this voxel
 	- T1_tissue_val: T1 tissue value for this voxel
