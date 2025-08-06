@@ -172,7 +172,6 @@ functions {
     int n = num_elements(t);
     vector[n] deltaM = rep_vector(0.0, n);
 
-    // FIXED: Use corrected deltaM model
     // Common factors
     real cbf_factor = 2 * alpha * cbf / 6000.0;
     real m0_factor = m0a * exp(-att / T1a);
@@ -263,7 +262,7 @@ transformed parameters {
 model {
   vector[n] mu;
 
-  // FIXED: Add LS-based priors for ATT and CBF
+
   if (use_att_prior_from_ls == 1) {
     att ~ normal(att_prior_from_ls, att_prior_std);
   } else {
