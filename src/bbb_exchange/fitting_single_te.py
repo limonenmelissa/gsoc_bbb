@@ -172,7 +172,6 @@ functions {
     int n = num_elements(t);
     vector[n] deltaM = rep_vector(0.0, n);
 
-    // Common factors
     real cbf_factor = 2 * alpha * cbf / 6000.0;
     real m0_factor = m0a * exp(-att / T1a);
     real t1_lambda_factor = T1a / lambda_val;
@@ -201,7 +200,7 @@ data {
   real<lower=0> m0a;
   real<lower=0> tau;
 
-  // Parameter values (used if not fitted)
+  // Fixed parameter values
   real<lower=0> T1a_fixed;
   real<lower=0> T1t_fixed;
   real<lower=0> lambda_fixed;
@@ -212,7 +211,7 @@ data {
   int<lower=0,upper=1> fit_T1t;
   int<lower=0,upper=1> fit_lambda;
 
-  // Priors (used if fitted)
+  // Priors
   real T1a_prior_mean;
   real T1a_prior_std;
   real T1t_prior_mean;
@@ -336,7 +335,7 @@ data {
   real<lower=0> m0a;
   real<lower=0> tau;
 
-  // Parameter values (used if not fitted)
+  // Parameter values 
   real<lower=0> T1a_fixed;
   real<lower=0> T1t_fixed;
   real<lower=0> lambda_fixed;
@@ -351,7 +350,7 @@ data {
   int<lower=0,upper=1> fit_abv;
   int<lower=0,upper=1> fit_att_a;
 
-  // Priors (used if fitted)
+  // Priors 
   real T1a_prior_mean;
   real T1a_prior_std;
   real T1t_prior_mean;
@@ -480,7 +479,7 @@ def bayesian_fit_voxel(t, signal, m0a, tau,
 		'n': len(t),
 		't': t.astype(float),
 		'signal': signal.astype(float),
-		'm0a': float(m0a),  # Should be 1.0 for normalized signals
+		'm0a': float(m0a),
 		'tau': float(tau),
 
 		# Fixed parameter values
