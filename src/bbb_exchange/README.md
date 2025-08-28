@@ -100,7 +100,7 @@ For **multi-echo time (single-TE) data**:
 ## In Progress
 - Finalisation of documentation  
 - Refinement and testing of the multi-echo time fitting algorithm  
-- Cleaning up `debug_asl.py` for possible future use
+- Finalisation of `debug_asl.py` for possible future use
 
 ---
 
