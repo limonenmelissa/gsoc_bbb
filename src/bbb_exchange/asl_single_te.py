@@ -3,9 +3,7 @@ import numpy as np
 from data_handling import load_nifti_file, load_json_metadata, save_nifti
 from fitting_single_te import create_parameter_config_from_config, convert_parameter, ls_fit_volume, ls_fit_volume_ext, \
 	bayesian_fit_volume, bayesian_fit_volume_ext
-from csv_utils import save_results_to_csv, save_ls_results_summary_csv
-from debug_asl import bayesian_fit_subset, print_comparison_summary, print_bayesian_summary_flexible
-from config import config
+import json
 
 """
 This Python file provides an asl script, which consists of the following steps:
@@ -16,15 +14,17 @@ This Python file provides an asl script, which consists of the following steps:
 4. Perform Least Squares fitting and save results
 5. Perform Bayesian fitting, either for the complete volume or for an adjustable subset of voxels, and save results
 
-The fitting can be run for either the tissue compartment only from DeltaM_model (simple model)
+The fitting can be run for either the tissue compartment only from DeltaM_model.py (simple model)
 or for the extended version which also incorporates the arterial component (extended model)
 
 Output:
-- nifti images of the fitted CBF and ATT data
+- nifti images of the fitted CBF and ATT data for the simple model
+- nifti images of the fitted CBF, ATT, ABV and ATT_A data for the extended model
 - print values in csv file (optional)
 """
 
-
+with open("config.json", "r") as file:
+		config = json.load(file)
 def create_parameter_config_from_config():
 	"""
 	Create parameter configuration from config.py
@@ -273,9 +273,9 @@ def asl(fitting_method='simple'):
 	}
 
 	# Save results and parameter information to csv file
-	csv_path_summary = save_ls_results_summary_csv(
-		att_map_lm, cbf_map_lm, data_dir
-	)
+	#csv_path_summary = save_ls_results_summary_csv(
+	#	att_map_lm, cbf_map_lm, data_dir
+	#)
 
 	# 5. === Bayesian fitting ===
 	print("\n=== Bayesian Fitting Configuration ===")
@@ -337,12 +337,12 @@ def asl(fitting_method='simple'):
 							   os.path.join(data_dir, f"{param}_fitted_std_map_{suffix}.nii.gz"))
 
 		# Save results as csv file (optional)
-		if bayesian_config['save_csv']:
-			save_results_to_csv(bayesian_results, data_dir, suffix=suffix)
+		#if bayesian_config['save_csv']:
+		#	save_results_to_csv(bayesian_results, data_dir, suffix=suffix)
 
 		# Print results comparison
-		print_bayesian_summary_flexible(bayesian_results)
-		print_comparison_summary(bayesian_results, att_map_lm, cbf_map_lm)
+		#print_bayesian_summary_flexible(bayesian_results)
+		#print_comparison_summary(bayesian_results, att_map_lm, cbf_map_lm)
 
 	print("\nDone!")
 

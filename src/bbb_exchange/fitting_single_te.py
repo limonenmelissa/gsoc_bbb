@@ -3,8 +3,9 @@ import os
 from data_handling import load_nifti_file
 import stan
 from scipy.optimize import curve_fit
-from DeltaM_model_ext import DeltaM_model_ext, dm_tiss
-from config import config
+from DeltaM_model import DeltaM_model_ext, dm_tiss
+
+import json
 
 """
 This file provides the necessary functions to
@@ -16,6 +17,9 @@ for both the Delta_M model (equation [1] from Chappell paper https://doi.org/10.
 In both algorithms, it is possible to flexibly read in the parameters as nparray, as nifti image, or as scalar.
 There is the option of using the values of the LS fitting voxel by voxel as prior for the Bayesian fitting.
 """
+
+with open("config.json", "r") as file:
+	config = json.load(file)
 
 def create_parameter_config_from_config():
     return {
@@ -1045,47 +1049,6 @@ def convert_parameter(param_input, shape, param_name="parameter"):
 
 	else:
 		raise ValueError(f"Invalid {param_name} data format. Must be scalar, filename, or numpy array")
-
-
-def create_parameter_config_from_config():
-
-	return {
-		# Fixed physiological parameters
-		'T1a': 1.65,  # T1 of arterial blood - can be scalar, filename, or nparray
-		'T1': 1.6,  # T1 of tissue - can be scalar, filename, or nparray
-		'lambd': 0.9,  # Blood-tissue-water partition coefficient
-		'a': 0.85 * 0.8,  # Labeling efficiency (alpha)
-
-		'abv': 0.02,  # Arterial blood volume (for extended model)
-		'att_a': 0.7,  # Arterial arrival time (for extended model)
-
-		# Fitting configuration
-		'fit_T1a': False,  # fit T1a as free parameter
-		'fit_T1': False,  # fit T1 as free parameter
-		'fit_lambd': False,  # fit lambda as free parameter
-		'fit_abv': False,  # fit arterial blood volume (extended model)
-		'fit_att_a': False,  # fit arterial arrival time (extended model)
-
-		# Priors for free parameters
-		'T1a_prior': {'mean': 1.65, 'std': 0.2},
-		'T1_prior': {'mean': 1.6, 'std': 0.3},
-		'lambd_prior': {'mean': 0.9, 'std': 0.1},
-		'abv_prior': {'mean': 0.02, 'std': 0.01},
-		'att_a_prior': {'mean': 0.7, 'std': 0.2},
-
-		# ATT and CBF priors from LS fitting
-		'att_prior_from_ls': True,  # Use LS ATT results as priors
-		'cbf_prior_from_ls': True,  # Use LS CBF results as priors
-		'att_prior_std': 0.3,  # Standard deviation for ATT prior
-		'cbf_prior_std': 15.0,  # Standard deviation for CBF prior
-
-		# Bounds for free parameters
-		'T1a_bounds': [1.0, 2.5],
-		'T1_bounds': [0.8, 2.0],
-		'lambd_bounds': [0.7, 1.1],
-		'abv_bounds': [0.001, 0.1],
-		'att_a_bounds': [0.1, 1.5]
-	}
 
 
 def choose_parameter_config():

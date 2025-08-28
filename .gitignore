@@ -1,2 +1,5 @@
 .directory/
 .idea/
+.venv/
+__pycache__/
+data/

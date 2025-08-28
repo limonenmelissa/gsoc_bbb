@@ -1,0 +1,84 @@
+{
+  "normalization": {
+    "m0_multiplier": 5,
+    "m0a_scale": 5400
+  },
+  "physiological": {
+    "T1a": 1.65,
+    "T1": 1.6,
+    "T2": 0.05,
+    "T2a": 0.15,
+    "itt": 0.2,
+    "texch": 0.1,
+    "lambd": 0.9,
+    "a": 0.68,
+    "abv": 0.02,
+    "att_a": 0.7
+  },
+  "fitting": {
+    "fit_T1a": false,
+    "fit_T1": false,
+    "fit_lambd": false,
+    "fit_abv": false,
+    "fit_att_a": false
+  },
+  "bounds": {
+    "T1a": [1.0, 2.5],
+    "T1": [0.8, 2.0],
+    "lambd": [0.7, 1.1],
+    "abv": [0.001, 0.1],
+    "att_a": [0.1, 1.5]
+  },
+  "priors": {
+    "T1a": { "mean": 1.65, "std": 0.2 },
+    "T1": { "mean": 1.6, "std": 0.3 },
+    "lambd": { "mean": 0.9, "std": 0.1 },
+    "abv": { "mean": 0.02, "std": 0.01 },
+    "att_a": { "mean": 0.7, "std": 0.2 }
+  },
+  "ls_priors": {
+    "att_prior_from_ls": true,
+    "cbf_prior_from_ls": true,
+    "att_prior_std": 0.3,
+    "cbf_prior_std": 15.0
+  },
+  "bayesian": {
+    "max_voxels": 1000,
+    "selection_method": "grid",
+    "grid_spacing": 5,
+    "save_maps": true,
+    "save_csv": true
+  },
+  "least_squares": {
+    "print_every": 50,
+    "initial_guess": {
+      "att": 1.2,
+      "f": 0.01
+    },
+    "bounds": {
+      "att": [0.1, 2.5],
+      "f": [0.001, 0.2]
+    },
+    "initial_guess_ext": {
+      "att": 1.2,
+      "f": 0.01,
+      "abv": 0.02,
+      "att_a": 0.7
+    },
+    "bounds_ext": {
+      "att": [0.1, 2.5],
+      "f": [0.001, 0.2],
+      "abv": [0.001, 0.1],
+      "att_a": [0.1, 2.0]
+    }
+  },
+  "multi_te": {
+    "test_voxel": [32, 32, 16],
+    "run_ls_fitting": true,
+    "run_bayesian_fitting": true,
+    "max_bayesian_voxels": 500,
+    "save_test_plot": true,
+    "save_csv": false
+  }
+}
+
