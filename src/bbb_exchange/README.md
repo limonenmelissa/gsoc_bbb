@@ -58,6 +58,39 @@
     - main script for multi-TE analysis
   - **config.json**
     - config file for all python files in this package 
+  - **requirements.txt**
+    - for easy installation of necessary Python packages 
+
+## Usage examples
+To run the code, make sure you have installed all necessary Python packages. They are given in `requirements.txt`.
+
+For **single-echo time (single-TE) data**:  
+
+1. Place your data in the following structure:  
+<project_root>/data/1TE/
+├── M0.nii
+├── PWI4D.nii
+├── M0.json
+└── PWI4D.json  
+2. Open `single_te_asl.py` to select the model:  
+- Options: `simple` (one-compartment) or `extended` (two-compartment)  
+- Default: `simple`
+3. Run the script: python3 single_te_asl.py
+4. Output: Fitted ATT and CBF NifTI images (and for the extended model additionally aBv and ATT_a) are saved in data/1TE. Both least-squares and Bayesian fitting are performed by default.
+
+
+For **multi-echo time (single-TE) data**:  
+
+1. Place your data in the following structure:  
+<project_root>/data/multite/
+├── M0.nii.gz
+├── PWI4D.nii
+├── M0.json
+└── PWI4D.json  
+2. Open `multi_te_asl.py`. For this script, only the three-compartment model is available. By default, both LS and Bayesian fitting will be done when running the script.
+3. Run the script: python3 multi_te_asl.py
+4. Output: Fitted ATT and CBF NifTI images are saved in /data/1TE.
+
 
 ## Completed Features
 - Implemented one-, two-, and three-compartment models  
@@ -67,7 +100,7 @@
 ## In Progress
 - Finalisation of documentation  
 - Refinement and testing of the multi-echo time fitting algorithm  
-
+- Cleaning up `debug_asl.py` for possible future use
 
 ---
 
