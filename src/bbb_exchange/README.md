@@ -113,7 +113,7 @@ Enhanced Python programming fluency, gained hands-on experience with NIfTI data,
 
 ---
 ## Acknowledgements
-**Mentors**: A huge thanks to Ben Dickie and Jan Petr for their guidance and support throughout the project. I greatly appreciate your feedback and encouragement during this work. It was fun to work with you.  
+**Mentors**: A huge thanks to Ben Dickie and Jan Petr for their guidance and support throughout the project. I greatly appreciate your feedback and encouragement during this work. It was fun to work with you. Also I am thankful to Amnah Mahroo for her help with coding the multi-echo time model.
 **Organisation**: Many thanks to OSIPI and Google Summer of Code for providing this opportunity to contribute to medical imaging research.  
 
 ---
